@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Prisha's Special Greeting Gallery ❤️</title>
+
+  <!-- Luxury Typography & Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-pink: #ff3377;
+      --soft-pink: #ffd6e6;
+      --deep-rose: #d6004b;
+      --pastel-purple: #c084fc;
+      --romantic-purple: #8b5cf6;
+      --royal-violet: #4c1d95;
+      --dark-violet: #22083a;
+      --card-glass: rgba(255, 255, 255, 0.52);
+      --card-border: rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 16px 36px -10px rgba(255, 51, 119, 0.22), 0 8px 24px -5px rgba(139, 92, 246, 0.18);
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Playfair Display', serif;
+      --font-cursive: 'Great Vibes', cursive;
+      --font-cinzel: 'Cinzel', serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: #2b1c3d;
+      background: radial-gradient(circle at 15% 15%, #ffe4f0 0%, #f4e8ff 45%, #fff0f7 75%, #ffd4e5 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #ffffff 10%, #ffddec 60%, #fed0e4 100%);
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease;
+    }
+
+    #loader.hidden-loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .heart-loader-core {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-pink);
+      transform: rotate(-45deg);
+      animation: beatingHeart 1.1s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+      box-shadow: 0 0 50px rgba(255, 51, 119, 0.75);
+    }
+
+    .heart-loader-core::before,
+    .heart-loader-core::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-pink);
+      border-radius: 50%;
+    }
+
+    .heart-loader-core::before { top: -30px; left: 0; }
+    .heart-loader-core::after { right: -30px; top: 0; }
+
+    .loader-phrase {
+      margin-top: 55px;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--royal-violet);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: softPulse 1.8s infinite ease-in-out;
+    }
+
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glow-blur-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+      animation: floatAura 12s infinite alternate ease-in-out;
+    }
+
+    .orb-left {
+      top: -5%;
+      left: -8%;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, #ffb3d1, rgba(255, 179, 209, 0));
+    }
+
+    .orb-right {
+      bottom: 5%;
+      right: -8%;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, #d6b8ff, rgba(214, 184, 255, 0));
+      animation-delay: -5s;
+    }
+
+    .audio-pill {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid var(--card-border);
+      padding: 11px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .audio-pill:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 14px 32px rgba(255, 51, 119, 0.28);
+    }
+
+    .audio-icon {
+      font-size: 1.15rem;
+      animation: wiggle 2s infinite ease-in-out;
+    }
+
+    .audio-text {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--royal-violet);
+      letter-spacing: 0.5px;
+    }
+
+    .audio-equalizer {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 15px;
+    }
+
+    .audio-equalizer span {
+      width: 3.5px;
+      height: 100%;
+      background: var(--primary-pink);
+      border-radius: 6px;
+      transform: scaleY(0.25);
+      transition: transform 0.3s ease;
+    }
+
+    .audio-pill.is-playing .audio-equalizer span {
+      animation: eqBar 0.9s infinite alternate ease-in-out;
+    }
+
+    .audio-pill.is-playing .audio-equalizer span:nth-child(1) { animation-delay: 0.1s; }
+    .audio-pill.is-playing .audio-equalizer span:nth-child(2) { animation-delay: 0.35s; }
+    .audio-pill.is-playing .audio-equalizer span:nth-child(3) { animation-delay: 0.2s; }
+    .audio-pill.is-playing .audio-equalizer span:nth-child(4) { animation-delay: 0.45s; }
+
+    .app-viewport {
+      position: relative;
+      z-index: 10;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .hero-zone {
+      text-align: center;
+      padding: 105px 15px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 24px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--deep-rose);
+      box-shadow: 0 8px 20px rgba(255, 51, 119, 0.15);
+      margin-bottom: 22px;
+      animation: floatBadge 3.5s ease-in-out infinite alternate;
+    }
+
+    .hero-main-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+      line-height: 1.18;
+      font-weight: 800;
+      color: var(--dark-violet);
+      margin-bottom: 18px;
+    }
+
+    .cursive-prisha {
+      font-family: var(--font-cursive);
+      font-size: 1.35em;
+      font-weight: 500;
+      background: linear-gradient(45deg, #ff0055, #9333ea, #ff4d79);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding: 0 10px;
+      display: inline-block;
+      filter: drop-shadow(0 6px 18px rgba(255, 51, 119, 0.3));
+    }
+
+    .beating-red-heart {
+      display: inline-block;
+      animation: beatingHeart 1.4s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.02rem, 2.5vw, 1.3rem);
+      color: #634f78;
+      max-width: 660px;
+      line-height: 1.65;
+      font-weight: 400;
+      margin-bottom: 35px;
+    }
+
+    .cta-explore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 42px;
+      background: linear-gradient(135deg, var(--primary-pink), var(--romantic-purple));
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-radius: 50px;
+      box-shadow: 0 14px 34px rgba(255, 51, 119, 0.38);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .cta-explore-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 20px 42px rgba(139, 92, 246, 0.45);
+    }
+
+    .quote-carousel-card {
+      background: var(--card-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid var(--card-border);
+      border-radius: 28px;
+      padding: 38px 30px;
+      max-width: 820px;
+      margin: 25px auto 65px;
+      text-align: center;
+      box-shadow: var(--glass-shadow);
+      position: relative;
+    }
+
+    .quote-glyph {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: rgba(255, 51, 119, 0.22);
+      line-height: 0;
+      margin-bottom: 12px;
+    }
+
+    .quote-track {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quote-slice {
+      display: none;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.15rem, 3.2vw, 1.45rem);
+      color: var(--royal-violet);
+      line-height: 1.55;
+      animation: fadeInSmooth 0.8s ease-in-out;
+    }
+
+    .quote-slice.active-quote {
+      display: block;
+    }
+
+    .quote-navigation-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .q-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.28);
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+
+    .q-dot.active-dot {
+      width: 28px;
+      border-radius: 20px;
+      background: var(--primary-pink);
+    }
+
+    .gallery-lead-block {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .gallery-kicker {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--primary-pink);
+    }
+
+    .gallery-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--dark-violet);
+      margin-top: 5px;
+    }
+
+    .card-matrix {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-bottom: 75px;
+    }
+
+    @media (min-width: 640px) {
+      .card-matrix {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .card-matrix {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+      }
+    }
+
+    .greeting-frame {
+      background: var(--card-glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid var(--card-border);
+      border-radius: 26px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--glass-shadow);
+      transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.45s ease;
+      position: relative;
+    }
+
+    .greeting-frame:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(255, 51, 119, 0.32), 0 12px 28px rgba(139, 92, 246, 0.22);
+    }
+
+    .poster-canvas-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4.2;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fdecf3;
+    }
+
+    .poster-canvas-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      display: block;
+    }
+
+    .greeting-frame:hover .poster-canvas-wrap img {
+      transform: scale(1.08);
+    }
+
+    .poster-badge-corner {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      z-index: 2;
+    }
+
+    .card-meta-details {
+      padding: 18px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .chapter-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--deep-rose);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .chapter-heading {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--royal-violet);
+      margin-bottom: 8px;
+    }
+
+    .chapter-blurb {
+      font-size: 0.88rem;
+      color: #645279;
+      line-height: 1.55;
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+
+    .open-card-btn {
+      width: 100%;
+      padding: 12px 18px;
+      border: 1.5px solid rgba(255, 51, 119, 0.38);
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 14px;
+      color: var(--dark-violet);
+      font-weight: 700;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .open-card-btn:hover {
+      background: linear-gradient(135deg, var(--primary-pink), var(--romantic-purple));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 8px 22px rgba(255, 51, 119, 0.32);
+    }
+
+    .appreciation-banner {
+      background: var(--card-glass);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 36px;
+      padding: 55px 30px;
+      text-align: center;
+      max-width: 780px;
+      margin: 40px auto 80px;
+      box-shadow: 0 20px 55px rgba(255, 51, 119, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .appreciation-banner::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(circle, rgba(255, 51, 119, 0.16) 0%, transparent 65%);
+      animation: rotateGlow 12s linear infinite;
+      z-index: 0;
+    }
+
+    .banner-interior {
+      position: relative;
+      z-index: 2;
+    }
+
+    .banner-interior h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+      margin-bottom: 12px;
+      color: var(--royal-violet);
+    }
+
+    .banner-interior p {
+      font-size: 1.1rem;
+      color: #634c7b;
+      max-width: 580px;
+      margin: 0 auto 30px;
+      line-height: 1.65;
+    }
+
+    .insta-direct-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 44px;
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: 50px;
+      box-shadow: 0 15px 38px rgba(220, 39, 67, 0.38);
+      transition: all 0.4s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .insta-direct-link:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 22px 55px rgba(188, 24, 136, 0.52);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 15px 65px;
+    }
+
+    .footer-floating-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .footer-title-bar {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--royal-violet);
+    }
+
+    .footer-subtitle-bar {
+      font-size: 0.85rem;
+      color: #796691;
+      margin-top: 5px;
+    }
+
+    .lightbox-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .lightbox-curtain.modal-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-dimmer {
+      position: absolute;
+      inset: 0;
+      background: rgba(22, 10, 32, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .lightbox-shell {
+      position: relative;
+      z-index: 10;
+      width: 92%;
+      max-width: 530px;
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .lightbox-curtain.modal-active .lightbox-shell {
+      transform: scale(1);
+    }
+
+    .dismiss-modal-btn {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1.5px solid rgba(255, 255, 255, 0.65);
+      color: #ffffff;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .dismiss-modal-btn:hover {
+      background: var(--primary-pink);
+      transform: rotate(90deg);
+    }
+
+    .lightbox-box {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 35px 75px rgba(0, 0, 0, 0.45);
+    }
+
+    .zoomable-holder {
+      width: 100%;
+      max-height: 72vh;
+      overflow: hidden;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .zoomable-holder img {
+      width: 100%;
+      height: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      cursor: zoom-in;
+      transition: transform 0.35s ease;
+    }
+
+    .zoomable-holder img.zoomed-state {
+      transform: scale(1.42);
+      cursor: zoom-out;
+    }
+
+    .lightbox-caption-panel {
+      padding: 18px 22px;
+      text-align: center;
+    }
+
+    .lightbox-caption-panel h3 {
+      font-family: var(--font-display);
+      color: var(--royal-violet);
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+
+    .lightbox-caption-panel p {
+      font-size: 0.82rem;
+      color: #796691;
+    }
+
+    #donTakeover {
+      position: fixed;
+      inset: 0;
+      background: #050109;
+      z-index: 9999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), visibility 1.5s ease;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+
+    #donTakeover.don-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .don-dark-aura {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 0, 85, 0.45) 0%, rgba(138, 43, 226, 0.3) 45%, transparent 72%);
+      filter: blur(90px);
+      animation: donAuraPulse 4s infinite alternate ease-in-out;
+      z-index: 1;
+    }
+
+    .don-flash-screen {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .don-stage-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .don-crown-gold {
+      font-size: clamp(3.2rem, 8.5vw, 6rem);
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 35px #ffd700);
+      animation: crownBob 2.6s infinite ease-in-out;
+      transform-origin: bottom center;
+    }
+
+    .don-kicker-text {
+      font-family: var(--font-main);
+      font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+      font-weight: 800;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #ff3377;
+      text-shadow: 0 0 15px rgba(255, 51, 119, 0.85);
+      margin-bottom: 15px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease 0.5s;
+    }
+
+    .don-massive-headline {
+      font-family: var(--font-cinzel);
+      font-size: clamp(2.8rem, 10vw, 7.2rem);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 0%, #ff6699 45%, #ff0055 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 32px rgba(255, 0, 85, 0.95)) drop-shadow(0 0 65px rgba(138, 43, 226, 0.75));
+      transform: scale(0.3) rotateX(40deg);
+      opacity: 0;
+      transition: all 1.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+    }
+
+    .don-active .don-kicker-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .don-active .don-massive-headline {
+      opacity: 1;
+      transform: scale(1) rotateX(0deg);
+      animation: neonFlicker 3s infinite alternate;
+    }
+
+    .don-sub-creed {
+      font-family: var(--font-main);
+      font-size: clamp(0.95rem, 2.8vw, 1.5rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 15px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: all 1s ease 0.9s;
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
+    }
+
+    .don-active .don-sub-creed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .don-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 25px;
+      opacity: 0;
+      transition: all 1s ease 1.2s;
+    }
+
+    .don-active .don-pill-row {
+      opacity: 1;
+    }
+
+    .don-tag-badge {
+      padding: 9px 22px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 0, 85, 0.55);
+      color: #ff99bb;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.22);
+    }
+
+    .leave-don-mode-btn {
+      margin-top: 40px;
+      padding: 15px 42px;
+      border-radius: 50px;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: all 0.8s ease 1.5s;
+    }
+
+    .don-active .leave-don-mode-btn {
+      opacity: 1;
+    }
+
+    .leave-don-mode-btn:hover {
+      background: linear-gradient(45deg, #ff0055, #8a2be2);
+      border-color: transparent;
+      box-shadow: 0 0 35px rgba(255, 0, 85, 0.85);
+      transform: scale(1.05);
+    }
+
+    /* Testing preview button for Don mode */
+    .test-don-toggle {
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      z-index: 1000;
+      background: rgba(34, 8, 58, 0.8);
+      color: #ffd6e6;
+      border: 1px solid rgba(255, 51, 119, 0.4);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .test-don-toggle:hover {
+      background: #ff0055;
+      color: #ffffff;
+    }
+
+    @keyframes beatingHeart {
+      0% { transform: rotate(-45deg) scale(0.92); }
+      50% { transform: rotate(-45deg) scale(1.18); }
+      100% { transform: rotate(-45deg) scale(0.92); }
+    }
+
+    @keyframes softPulse {
+      0%, 100% { opacity: 0.65; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes floatAura {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(45px, 35px) scale(1.15); }
+    }
+
+    @keyframes floatBadge {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-7px); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+
+    @keyframes eqBar {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+
+    @keyframes fadeInSmooth {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes donAuraPulse {
+      0% { transform: scale(0.85); opacity: 0.55; }
+      100% { transform: scale(1.22); opacity: 0.85; }
+    }
+
+    @keyframes crownBob {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(-6deg); }
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% { filter: drop-shadow(0 0 32px rgba(255, 0, 85, 0.95)) drop-shadow(0 0 65px rgba(138, 43, 226, 0.75)); }
+      50% { filter: drop-shadow(0 0 48px rgba(255, 0, 85, 1)) drop-shadow(0 0 85px rgba(255, 102, 153, 0.95)); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="heart-loader-core"></div>
+    <div class="loader-phrase">Welcome to Prisha's World ✨</div>
+  </div>
+
+  <canvas id="particleCanvas"></canvas>
+  <div class="glow-blur-orb orb-left"></div>
+  <div class="glow-blur-orb orb-right"></div>
+
+  <div class="audio-pill" id="audioToggleBtn" title="Play / Pause Romantic Track">
+    <span class="audio-icon">🎵</span>
+    <span class="audio-text" id="audioBtnText">Play Music</span>
+    <div class="audio-equalizer">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Quick Trigger for Don Cinematic Test -->
+  <button class="test-don-toggle" id="manualDonTrigger" title="Preview 30s Takeover Instantly">⚡ Trigger Don Mode</button>
+
+  <div class="app-viewport">
+    
+    <header class="hero-zone">
+      <div class="hero-badge">✨ Created With Endless Love</div>
+      <h1 class="hero-main-title">
+        For My Special <span class="cursive-prisha">Prisha</span> <span class="beating-red-heart">❤️</span>
+      </h1>
+      <p class="hero-tagline">
+        A small collection of beautiful memories and greetings made with love.
+      </p>
+      <a href="#gallerySection" class="cta-explore-btn">
+        <span>Open Gallery</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+      </a>
+    </header>
+
+    <section class="quote-carousel-card">
+      <div class="quote-glyph">“</div>
+      <div class="quote-track" id="quoteTrack">
+        <div class="quote-slice active-quote">“In your smile, I see something more beautiful than the stars.”</div>
+        <div class="quote-slice">“Some people make the world brighter just by being in it. You are one of them.”</div>
+        <div class="quote-slice">“Keep shining, keep smiling, and always be the amazing Prisha you are.”</div>
+        <div class="quote-slice">“A girl with big dreams, pure heart, and unforgettable magic.”</div>
+      </div>
+      <div class="quote-navigation-dots" id="quoteNavigation">
+        <span class="q-dot active-dot" onclick="switchQuoteIndex(0)"></span>
+        <span class="q-dot" onclick="switchQuoteIndex(1)"></span>
+        <span class="q-dot" onclick="switchQuoteIndex(2)"></span>
+        <span class="q-dot" onclick="switchQuoteIndex(3)"></span>
+      </div>
+    </section>
+
+    <section id="gallerySection">
+      <div class="gallery-lead-block">
+        <span class="gallery-kicker">Exclusive Handpicked Collection</span>
+        <h2 class="gallery-title">Prisha's Greeting Cards</h2>
+      </div>
+
+      <div class="card-matrix">
+        <!-- CARD 1 (1.png) -->
+        <article class="greeting-frame" data-title="Special Wishes For Prisha ❤️" data-img="1.png">
+          <div class="poster-canvas-wrap">
+            <img src="1.png" alt="Greeting Card 1 - Special Wishes" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" />
+            <div class="poster-badge-corner">🌸</div>
+          </div>
+          <div class="card-meta-details">
+            <span class="chapter-eyebrow">Chapter 01</span>
+            <h3 class="chapter-heading">Special Wishes</h3>
+            <p class="chapter-blurb">Beautiful Mind, Beautiful Soul, Beautiful You ✨</p>
+            <button class="open-card-btn launch-modal-btn">
+              <span>View Card</span>
+              <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- CARD 2 (2.png) -->
+        <article class="greeting-frame" data-title="Don & Don - Different Vibes ✨" data-img="2.png">
+          <div class="poster-canvas-wrap">
+            <img src="2.png" alt="Greeting Card 2 - Don and Don" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80'" />
+            <div class="poster-badge-corner">👑</div>
+          </div>
+          <div class="card-meta-details">
+            <span class="chapter-eyebrow">Chapter 02</span>
+            <h3 class="chapter-heading">Different Vibes</h3>
+            <p class="chapter-blurb">Real, Natural, Beautiful, Unique & Always Me 🌸</p>
+            <button class="open-card-btn launch-modal-btn">
+              <span>View Card</span>
+              <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- CARD 3 (3.png) -->
+        <article class="greeting-frame" data-title="DAV School Gaya Don Attitude 💖" data-img="3.png">
+          <div class="poster-canvas-wrap">
+            <img src="3.png" alt="Greeting Card 3 - DAV School Gaya" onerror="this.src='https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80'" />
+            <div class="poster-badge-corner">⚡</div>
+          </div>
+          <div class="card-meta-details">
+            <span class="chapter-eyebrow">Chapter 03</span>
+            <h3 class="chapter-heading">Don Attitude</h3>
+            <p class="chapter-blurb">DAV School Gaya Ki Don — Big Dreams & Bright Future 💫</p>
+            <button class="open-card-btn launch-modal-btn">
+              <span>View Card</span>
+              <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- CARD 4 (4.png) -->
+        <article class="greeting-frame" data-title="Always Special Prisha 💖" data-img="4.png">
+          <div class="poster-canvas-wrap">
+            <img src="4.png" alt="Greeting Card 4 - Stay Blessed" onerror="this.src='https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80'" />
+            <div class="poster-badge-corner">❤️</div>
+          </div>
+          <div class="card-meta-details">
+            <span class="chapter-eyebrow">Chapter 04</span>
+            <h3 class="chapter-heading">Stay Blessed</h3>
+            <p class="chapter-blurb">Cute But Powerful — You Are Always Special 🌷</p>
+            <button class="open-card-btn launch-modal-btn">
+              <span>View Card</span>
+              <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="appreciation-banner">
+      <div class="banner-interior">
+        <span class="hero-badge">Say Hi On Instagram</span>
+        <h2>Thank You, Prisha! ❤️</h2>
+        <p>Hope this special website brings a warm smile to your day. Keep spreading your positivity and magical aura everywhere you go!</p>
+        <a href="https://www.instagram.com/vikash__sx?stkn=azd3NjczazhqOGhk" target="_blank" rel="noopener noreferrer" class="insta-direct-link">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <span>Connect On Instagram</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-floating-row">
+        <span>❤️</span><span>🌸</span><span>✨</span><span>👑</span><span>❤️</span>
+      </div>
+      <p class="footer-title-bar">Made With <span class="beating-red-heart">❤️</span> For Prisha</p>
+      <p class="footer-subtitle-bar">Forever In My Heart & Thoughts</p>
+    </footer>
+
+  </div>
+
+  <div class="lightbox-curtain" id="imageLightbox" role="dialog">
+    <div class="lightbox-dimmer" id="lightboxDimmer"></div>
+    <div class="lightbox-shell">
+      <button class="dismiss-modal-btn" id="closeModalBtn">&times;</button>
+      <div class="lightbox-box">
+        <div class="zoomable-holder">
+          <img id="modalTargetImg" src="" alt="Zoomable Greeting Card" title="Click or tap to zoom" />
+        </div>
+        <div class="lightbox-caption-panel">
+          <h3 id="modalHeadingTitle">Prisha's Greeting</h3>
+          <p>Tap card to Zoom in/out • Tap background to close</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="donTakeover">
+    <div class="don-dark-aura"></div>
+    <div class="don-flash-screen" id="donFlash"></div>
+
+    <div class="don-stage-content">
+      <div class="don-crown-gold">👑</div>
+      <p class="don-kicker-text">DAV School Gaya • Same Girl Different Vibes</p>
+      <h1 class="don-massive-headline">Main Huu DoN</h1>
+      <p class="don-sub-creed">Big Dreams • Never Give Up • Don Attitude</p>
+
+      <div class="don-pill-row">
+        <span class="don-tag-badge">⚡ Real & Natural</span>
+        <span class="don-tag-badge">💖 Future is Bright</span>
+        <span class="don-tag-badge">👑 Always Prisha</span>
+      </div>
+
+      <button class="leave-don-mode-btn" id="returnToGalleryBtn">
+        <span>Back to Romantic Gallery</span>
+        <span style="font-size: 1.25rem;">🌸</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // 1. DISMISS PRELOADER WITH SMOOTH FADE
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if (loader) loader.classList.add('hidden-loader');
+      }, 650);
+    });
+
+    // 2. AUDIO PLAYER WITH SYNTH FALLBACK (song1.mp3)
+    const audioBtn = document.getElementById('audioToggleBtn');
+    const audioBtnText = document.getElementById('audioBtnText');
+    const audioTrack = new Audio('song1.mp3');
+    audioTrack.loop = true;
+    let trackPlaying = false;
+    let synthCtx = null;
+    let synthTimer = null;
+
+    // Harmonic pentatonic chords in Hz (soft music-box scale fallback)
+    const harmonyFrequencies = [261.63, 329.63, 392.00, 440.00, 493.88, 523.25, 659.25, 783.99];
+
+    function chimeTone(freq, duration = 1.4) {
+      if (!synthCtx) return;
+      const osc = synthCtx.createOscillator();
+      const gain = synthCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, synthCtx.currentTime);
+      gain.gain.setValueAtTime(0.001, synthCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.12, synthCtx.currentTime + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, synthCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(synthCtx.destination);
+      osc.start();
+      osc.stop(synthCtx.currentTime + duration);
+    }
+
+    function runSynthMelody() {
+      if (!synthCtx) {
+        synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (synthCtx.state === 'suspended') synthCtx.resume();
+      let step = 0;
+      synthTimer = setInterval(() => {
+        if (!trackPlaying || !synthCtx) return;
+        const noteA = harmonyFrequencies[Math.floor(Math.random() * harmonyFrequencies.length)];
+        const noteB = harmonyFrequencies[(step % 4) * 2];
+        chimeTone(noteA, 1.5);
+        if (Math.random() > 0.4) chimeTone(noteB, 1.8);
+        step++;
+      }, 700);
+    }
+
+    audioBtn.addEventListener('click', () => {
+      if (!trackPlaying) {
+        audioTrack.play().then(() => {
+          trackPlaying = true;
+          audioBtn.classList.add('is-playing');
+          audioBtnText.textContent = "Pause Melody";
+        }).catch(() => {
+          // If song1.mp3 not found, activate automatic romantic synth audio
+          trackPlaying = true;
+          audioBtn.classList.add('is-playing');
+          audioBtnText.textContent = "Playing Chimes";
+          runSynthMelody();
+        });
+      } else {
+        trackPlaying = false;
+        audioTrack.pause();
+        if (synthTimer) clearInterval(synthTimer);
+        audioBtn.classList.remove('is-playing');
+        audioBtnText.textContent = "Play Music";
+      }
+    });
+
+    // 3. ROMANTIC QUOTES ROTATOR WITH INTERACTIVE DOTS
+    const quoteSlices = document.querySelectorAll('.quote-slice');
+    const quotePips = document.querySelectorAll('.q-dot');
+    let activeQuoteNum = 0;
+
+    function switchQuoteIndex(targetIndex) {
+      quoteSlices[activeQuoteNum].classList.remove('active-quote');
+      quotePips[activeQuoteNum].classList.remove('active-dot');
+      activeQuoteNum = targetIndex;
+      quoteSlices[activeQuoteNum].classList.add('active-quote');
+      quotePips[activeQuoteNum].classList.add('active-dot');
+    }
+
+    setInterval(() => {
+      const nextIndex = (activeQuoteNum + 1) % quoteSlices.length;
+      switchQuoteIndex(nextIndex);
+    }, 4800);
+
+    // 4. FLOATING CANVAS HEARTS & GLITTERING STARS
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+
+    function adaptCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', adaptCanvas);
+    adaptCanvas();
+
+    class FloatingSpark {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 25;
+        this.size = Math.random() * 14 + 8;
+        this.speedY = Math.random() * 1.5 + 0.6;
+        this.speedX = Math.sin(Math.random() * 5) * 0.75;
+        this.opacity = Math.random() * 0.5 + 0.35;
+        this.isHeart = Math.random() > 0.45;
+        this.color = Math.random() > 0.5 ? '#ff3377' : '#b28bfb';
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+      }
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+        this.rotation += this.rotationSpeed;
+        if (this.y < -30) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        if (this.isHeart) {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          const topCurve = this.size * 0.3;
+          ctx.moveTo(0, topCurve);
+          ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurve);
+          ctx.bezierCurveTo(-this.size / 2, (this.size + topCurve) / 2, 0, this.size, 0, this.size);
+          ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurve) / 2, this.size / 2, topCurve);
+          ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurve);
+          ctx.fill();
+        } else {
+          // 4-point glittering star
+          ctx.fillStyle = '#ffb3cf';
+          ctx.beginPath();
+          for (let i = 0; i < 4; i++) {
+            ctx.lineTo(Math.cos((18 + i * 90) * Math.PI / 180) * this.size * 0.5,
+                       -Math.sin((18 + i * 90) * Math.PI / 180) * this.size * 0.5);
+            ctx.lineTo(Math.cos((54 + i * 90) * Math.PI / 180) * this.size * 0.22,
+                       -Math.sin((54 + i * 90) * Math.PI / 180) * this.size * 0.22);
+          }
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    const totalCount = window.innerWidth < 768 ? 22 : 46;
+    for (let i = 0; i < totalCount; i++) {
+      const spark = new FloatingSpark();
+      spark.y = Math.random() * canvas.height;
+      particlesArray.push(spark);
+    }
+
+    function loopCanvasParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(loopCanvasParticles);
+    }
+    loopCanvasParticles();
+
+    // 5. LIGHTBOX MODAL WITH ZOOM FUNCTIONALITY
+    const lightboxCurtain = document.getElementById('imageLightbox');
+    const modalTargetImg = document.getElementById('modalTargetImg');
+    const modalHeadingTitle = document.getElementById('modalHeadingTitle');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const lightboxDimmer = document.getElementById('lightboxDimmer');
+
+    document.querySelectorAll('.launch-modal-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const parentCard = e.target.closest('.greeting-frame');
+        modalTargetImg.src = parentCard.getAttribute('data-img');
+        modalHeadingTitle.textContent = parentCard.getAttribute('data-title');
+        modalTargetImg.classList.remove('zoomed-state');
+        lightboxCurtain.classList.add('modal-active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function exitLightbox() {
+      lightboxCurtain.classList.remove('modal-active');
+      modalTargetImg.classList.remove('zoomed-state');
+      document.body.style.overflow = '';
+    }
+
+    closeModalBtn.addEventListener('click', exitLightbox);
+    lightboxDimmer.addEventListener('click', exitLightbox);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') exitLightbox();
+    });
+
+    modalTargetImg.addEventListener('click', () => {
+      modalTargetImg.classList.toggle('zoomed-state');
+    });
+
+    // 6. SCREEN TAP / CLICK HEART BURST PARTICLE EFFECT
+    window.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.audio-pill') || e.target.closest('.q-dot')) return;
+      
+      const burstHeart = document.createElement('div');
+      burstHeart.textContent = '💖';
+      burstHeart.style.position = 'fixed';
+      burstHeart.style.left = `${e.clientX}px`;
+      burstHeart.style.top = `${e.clientY}px`;
+      burstHeart.style.fontSize = '24px';
+      burstHeart.style.pointerEvents = 'none';
+      burstHeart.style.zIndex = '99999';
+      burstHeart.style.transform = 'translate(-50%, -50%) scale(1)';
+      burstHeart.style.transition = 'all 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
+      document.body.appendChild(burstHeart);
+
+      setTimeout(() => {
+        burstHeart.style.transform = `translate(-50%, -100px) scale(1.8)`;
+        burstHeart.style.opacity = '0';
+      }, 20);
+
+      setTimeout(() => burstHeart.remove(), 850);
+    });
+
+    // 7. CINEMATIC 30-SECOND BLACKOUT TAKEOVER: "MAIN HUU DON"
+    const donTakeover = document.getElementById('donTakeover');
+    const donFlash = document.getElementById('donFlash');
+    const returnToGalleryBtn = document.getElementById('returnToGalleryBtn');
+    const manualDonTrigger = document.getElementById('manualDonTrigger');
+
+    function triggerDonMode() {
+      donFlash.style.opacity = '0.9';
+      donFlash.style.transition = 'opacity 0.2s ease-out';
+      setTimeout(() => {
+        donFlash.style.opacity = '0';
+        donTakeover.classList.add('don-active');
+        document.body.style.overflow = 'hidden';
+      }, 160);
+    }
+
+    // Auto-triggers after exactly 30 seconds
+    const donTimer = setTimeout(triggerDonMode, 30000);
+
+    // Manual test trigger button
+    manualDonTrigger.addEventListener('click', () => {
+      clearTimeout(donTimer);
+      triggerDonMode();
+    });
+
+    returnToGalleryBtn.addEventListener('click', () => {
+      donTakeover.classList.remove('don-active');
+      document.body.style.overflow = '';
+    });
+  </script>
+</body>
+</html>
